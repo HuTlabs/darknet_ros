@@ -15,8 +15,6 @@
 #include "darknet_ros/YoloObjectDetector.hpp"
 #include <geometry_msgs/Pose.h>
 
-#include <std_msgs/String.h>
-
 // Check for xServer
 #include <X11/Xlib.h>
 
@@ -41,8 +39,8 @@ namespace darknet_ros
          classLabels_(0),
          rosBoxes_(0),
          rosBoxCounter_(0),
-         imagergb_sub(imageTransport_,"/xtion/rgb/image_color",1),       //For depth inclussion
-         imagedepth_sub(imageTransport_,"/xtion/depth_registered/image_raw",1),   //For depth inclussion
+         imagergb_sub(imageTransport_,"/kinect2/qhd/image_color",1),       //For depth inclussion
+         imagedepth_sub(imageTransport_,"/kinect2/qhd/image_depth_rect",1),   //For depth inclussion
          sync_1(MySyncPolicy_1(5), imagergb_sub, imagedepth_sub)        //For depth inclussion
 
    {
@@ -159,18 +157,13 @@ namespace darknet_ros
       bool pointlatch;
 
 
-  std::string okok;
-  int objectqueuesize;
-  bool objectlatch;
-
-
       std::string depthTopicName;        //For depth inclussion
       int depthQueueSize;                //For depth inclussion
 
-      nodeHandle_.param("subscribers/camera_reading/topic", cameraTopicName, std::string("/camera/color/image_raw"));
+      nodeHandle_.param("subscribers/camera_reading/topic", cameraTopicName, std::string("/kinect2/qhd/image_color"));
       nodeHandle_.param("subscribers/camera_reading/queue_size", cameraQueueSize, 1);
 
-      nodeHandle_.param("subscribers/camera_depth/topic", depthTopicName, std::string("/camera/depth/image_rect_raw"));   //For depth inclussion
+      nodeHandle_.param("subscribers/camera_depth/topic", depthTopicName, std::string("/kinect2/qhd/image_depth_rect"));   //For depth inclussion
       nodeHandle_.param("subscribers/camera_depth/queue_size", depthQueueSize, 1);                            //For depth inclussion
 
       nodeHandle_.param("publishers/object_detector/topic", objectDetectorTopicName, std::string("found_object"));
@@ -190,10 +183,6 @@ namespace darknet_ros
       nodeHandle_.param("publishers/point/queue_size", pointquesize, 1);
       nodeHandle_.param("publishers/point/latch", pointlatch, false);
 
-      nodeHandle_.param("publishers/kkkk/topic", okok, std::string("found_obj"));
-      nodeHandle_.param("publishers/kkkk/queue_size", objectqueuesize, 1);
-      nodeHandle_.param("publishers/kkkk/latch", objectlatch, false);
-
 
       sync_1.registerCallback(boost::bind(&YoloObjectDetector::cameraCallback,this,_1,_2));   //For depth inclussion
 
@@ -202,9 +191,6 @@ namespace darknet_ros
       detectionImagePublisher_ = nodeHandle_.advertise<sensor_msgs::Image>(detectionImageTopicName, detectionImageQueueSize, detectionImageLatch);
       
       points_v=nodeHandle_.advertise<geometry_msgs::Pose>(point1,pointquesize,pointlatch);
-
-objectP_ = nodeHandle_.advertise<std_msgs::String>(okok,objectqueuesize,objectlatch);
-
 
 
       // Action servers.
@@ -792,12 +778,6 @@ objectP_ = nodeHandle_.advertise<std_msgs::String>(okok,objectqueuesize,objectla
                   boundingBox.Invalid = Invalid;
                   boundingBoxesResults_.bounding_boxes.push_back(boundingBox);
                   printf("\n%d",i);
-char A[80][20]={"PERSON","BICYCLE","CAR","MOTORBIKE","AEROPLANE","BUS","TRAIN","TRUCK","BOAT","TRAFFIC LIGHT","FIRE HYDRANT","STOP SIGN","PARKING METER","BENCH","BIRD","CAT","DOG","HORSE","SHEEP","COW","ELEPHANT","BEAR","ZEBRA","GIRAFFE","BACKPACK","UMBRELLA","HANDBAG","TIE","SUITCASE","FRISBEE","SKIS","SNOWBOARD","SPORTS BALL","KITE","BASEBALL BAT","BASEBALL GLOVE","SKATEBOARD","SURFBOARD","TENNIS RACKET","BOTTLE","WINE GLASS","CUP","FORK","KNIFE","SPOON","BOWL","BANANA","APPLE","SANDWICH","ORANGE","BROCCOLI","CARROT","HOT DOG","PIZZA","DONUT","CAKE","CHAIR","SOFA","POTTEDPLANT","BED","DININGTABLE","TOILET","TVMONITOR","LAPTOP","MOUSE","REMOTE","KEYBOARD","CELL PHONE","MICROWAVE","OVEN","TOASTER","SINK","REFRIGERATOR","BOOK","CLOCK","VASE","SCISSORS","TEDDY BEAR","HAIR DRIER","TOOTHBRUSH"};
-
-std_msgs::String msg1;
-msg1.data=A[i];
-objectP_.publish(msg1);
-
 		  geometry_msgs::Pose msg23;	
 		  msg23.position.x=X;
 		  msg23.position.y=Y;
@@ -864,8 +844,14 @@ objectP_.publish(msg1);
       int xcenter = (((xmax-xmin)/2)+xmin);
       int ycenter = (((ymax-ymin)/2)+ymin);
       int Ind=0;
+      int person_id=0; 
       float GrayValue=0;
-      printf("\nwow! %d",ObjID);
+      printf("\nwow1! %d",ObjID);
+      if(ObjID==0)
+      {
+	person_id = person_id +1;
+	printf("\nperson id :%d",person_id);
+      }
      // float Value=0;
 
         /*  for(int i=xmin; i<=xmax; i++)

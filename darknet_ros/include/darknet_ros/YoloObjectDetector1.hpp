@@ -141,7 +141,6 @@ namespace darknet_ros
       ros::Publisher objectPublisher_;
       ros::Publisher boundingBoxesPublisher_;
       ros::Publisher points_v;
-      ros::Publisher objectP_;
 
       // Syncronizing Image messages - For depth inclussion
       typedef image_transport::SubscriberFilter ImageSubscriberFilter;
