@@ -6,18 +6,23 @@
 
    mkdir ~/yolo
 
-  cd yolo
+   cd yolo
 
-mkdir src
+   mkdir src
 
-cd src
+   cd src
 
-git clone https://github.com/HuTlabs/darknet_ros.git
+   git clone https://github.com/HuTlabs/darknet_ros.git
 
-cd ..
+   cd ..
 
-catkin_make
+   catkin_make
 
 2) After doing catkin_make, follow this path 
 
-cd src/
+   cd src/darknet_ros/darknet_ros/yolo_network_config/weights
+   
+   The weights should be download with the help of how_to_download_weights.txt file and kept in that folder itself.
+   
+   
+   
