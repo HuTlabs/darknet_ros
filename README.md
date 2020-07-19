@@ -32,11 +32,11 @@ For camera, we will obtain rbg camera topic and depth camera topic, which should
 
    i) cd src/darknet_ros/darknet_ros/config/
    
-          In ros.yaml file, change the topic of camera_reading and camera_depth.
+      In ros.yaml file, change the topic of camera_reading and camera_depth.
    
    ii) cd src/darknet_ros/darknet_rod/src
 
-           In the YoloObjectDetector.cpp file, change the rbg and depth image topic names on line no 44, 45.
+      In the YoloObjectDetector.cpp file, change the rbg and depth image topic names on line no 44, 45.
    
 2) Launch the detection file
 
