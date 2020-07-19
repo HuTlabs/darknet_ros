@@ -4,9 +4,9 @@
 
 1) Create a workspace name yolo and git clone this package into that package
 
-mkdir ~/yolo
+   mkdir ~/yolo
 
-cd yolo
+  cd yolo
 
 mkdir src
 
